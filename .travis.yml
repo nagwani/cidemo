@@ -3,4 +3,4 @@ language: php
 php:
   - 5.5
 #before_script: sh deploy.sh
-script: h deploy.sh
+script: sh deploy.sh
