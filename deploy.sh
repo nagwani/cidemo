@@ -1,11 +1,11 @@
 #git log
 
 #!/bin/sh
-#GITORIOUS_IDENTITY_FILE="~/.ssh/id_rsa"
+GITORIOUS_IDENTITY_FILE="~/.ssh/id_rsa"
 
-#if [ "run" != "$1" ]; then
-# exec ssh -i "$GITORIOUS_IDENTITY_FILE" -o "StrictHostKeyChecking no" "$@"
-#fi
+if [ "run" != "$1" ]; then
+ exec ssh -i "$GITORIOUS_IDENTITY_FILE" -o "StrictHostKeyChecking no" "$@"
+fi
 
 remote="indiacidemo@svn-4273.devcloud.hosting.acquia.com:indiacidemo.git"
 
