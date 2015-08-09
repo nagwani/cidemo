@@ -1,32 +1,27 @@
 #git log
 
-#!/bin/sh
-GITORIOUS_IDENTITY_FILE="~/.ssh/id_rsa"
+#!/bin/bash
+#set -e # exit with nonzero exit code if anything fails
 
-if [ "run" != "$1" ]; then
- exec ssh -i "$GITORIOUS_IDENTITY_FILE" -o "StrictHostKeyChecking no" "$@"
-fi
+# clear and re-create the out directory
+#rm -rf out || exit 0;
+#mkdir out;
 
-remote="indiacidemo@svn-4273.devcloud.hosting.acquia.com:indiacidemo.git"
+# go to the out directory and create a *new* Git repo
+#cd out
+#git init
 
-echo "Mirroring to $remote"
+# inside this git repo we'll pretend to be a new user
+git config user.name "Vaibhav Jain"
+git config user.email "in.vaibhavjain@gmail.com"
 
-export GITORIOUS_IDENTITY_FILE="mktemp /tmp/tmp/$RANDOM"
-export GIT_SSH="$0"
+# The first and only commit to this new Git repo contains all the
+# files present with the commit message "Deploy to GitHub Pages".
+#git add .
+#git commit -m "Deploy to GitHub Pages"
 
-cat >"$GITORIOUS_IDENTITY_FILE" <<EOF
-YOUR SSH PRIVATE KEY
-
-EOF
-cat >"$GITORIOUS_IDENTITY_FILE.pub" <<EOF
-YOUR SSH PUBLIC KEY
-
-EOF
-
-#echo git push --mirror "$remote"
-git push --mirror "$remote"
-
-rm -f "$GITORIOUS_IDENTITY_FILE"
-rm -f "$GITORIOUS_IDENTITY_FILE.pub"
-
-exit 0
+# Force push from the current repo's master branch to the remote
+# repo's gh-pages branch. (All previous history on the gh-pages branch
+# will be lost, since we are overwriting it.) We redirect any output to
+# /dev/null to hide any sensitive credential data that might otherwise be exposed.
+git push --force --quiet "https://indiacidemo@svn-4273.devcloud.hosting.acquia.com:indiacidemo.git" travis:master > /dev/null 2>&1
